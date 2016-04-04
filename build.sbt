@@ -105,6 +105,7 @@ lazy val testkit = (project in file("testkit")).
     name := "play-kamon-extensions-testkit",
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2-mock" % Specs2Version % Test
-    )
+    ),
+    coverageExcludedPackages := "*test*"
   ).
   dependsOn(core)
