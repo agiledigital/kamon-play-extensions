@@ -106,6 +106,6 @@ lazy val testkit = (project in file("testkit")).
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2-mock" % Specs2Version % Test
     ),
-    coverageExcludedPackages := "*test*"
+    coverageExcludedPackages := ".*test.*"
   ).
   dependsOn(core)
