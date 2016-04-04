@@ -208,7 +208,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
           // Then it should be open before the future is completed.
           // Must move the context through the future manually as we can not rely on the weaving to do it when
           // running tests.
-          context.name must_== "success"
+          context.name must_=== "success"
           context.isOpen must beTrue
           context
         }
@@ -217,7 +217,10 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       // And it should closed after the future completes.
       p.success(10)
       val context = Await.result(contextFut, defaultAwait)
-      context.isOpen must beFalse
+      eventually(defaultRetries, defaultTimeout) {
+        context.name must_=== "success"
+        context.isOpen must beFalse
+      }
 
       // And the counters should not have been incremented.
       takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("success", "success"))).count must_=== 0
