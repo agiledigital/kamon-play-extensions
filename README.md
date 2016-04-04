@@ -7,7 +7,7 @@ Provides a set of Play2 injectable extentsions for [Kamon](http://kamon.io/).
 Add library as a dependency:
 
 ```scala
-"au.com.agiledigital" %% "play-kamon-extensions" % "0.4"
+"au.com.agiledigital" %% "play-kamon-extensions" % "0.5"
 ```
 
 Enable the Play2 module in `application.conf`
@@ -92,7 +92,7 @@ This will cause metrics for those traces to be written to `statsd.timer.$Applica
 To aid testing code that depends upon the `Metrics` extension, depend upon the testkit:
 
 ```scala
-"au.com.agiledigital" %% "play-kamon-extensions-testkit" % "0.4"
+"au.com.agiledigital" %% "play-kamon-extensions-testkit" % "0.5"
 ```
 
 Use the do-nothing `Metrics implementation from `au.com.agiledigital.kamon.play_extensions.test#metrics`
