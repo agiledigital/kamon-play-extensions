@@ -90,6 +90,7 @@ lazy val coreTests = (project in file("core-tests")).
       "org.specs2" %% "specs2-mock" % Specs2Version % Test,
       "com.typesafe.play" %% "play-specs2" % PlayVersion % Test
     ),
+    fork in Test := false,
     parallelExecution in Test := false,
     publish := {},
     publishArtifact := false

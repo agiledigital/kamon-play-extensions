@@ -183,7 +183,9 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
 
       // Then the context should have been closed after the future completes.
       result must beLike[TraceContext]({
-        case context: TraceContext => context.isClosed must beTrue
+        case context: TraceContext => eventually(defaultRetries, defaultTimeout) {
+          context.isClosed must beTrue
+        }
       }).awaitFor(defaultAwait)
     }
   }
@@ -215,7 +217,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       // And it should closed after the future completes.
       p.success(10)
       val context = Await.result(contextFut, defaultAwait)
-      metrics.currentContext.isOpen must beFalse
+      context.isOpen must beFalse
 
       // And the counters should not have been incremented.
       takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("success", "success"))).count must_=== 0
@@ -250,7 +252,10 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       val context = Await.result(contextFut, defaultAwait)
 
       // Then the success count for the trace should have been incremented.
-      takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("count-success", "count-success"))).count must_=== 1
+
+      eventually(defaultRetries, defaultTimeout) {
+        takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("count-success", "count-success"))).count must_=== 1
+      }
 
       // And the failure count should not have been.
       takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateFailureName("count-success", "count-success"))).count must_=== 0
@@ -286,7 +291,9 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("count-failures", "count-failures"))).count must_=== 0
 
       // And the failure count should have been.
-      takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateFailureName("count-failures", "count-failures"))).count must_=== 1
+      eventually(defaultRetries, defaultTimeout) {
+        takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateFailureName("count-failures", "count-failures"))).count must_=== 1
+      }
     }
   }
 
@@ -313,7 +320,9 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       val context = Await.result(contextFut, defaultAwait)
 
       // Then the counters should have been created with the expected names.
-      takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("with-category", "category\\.with-category"))).count must_=== 1
+      eventually(defaultRetries, defaultTimeout) {
+        takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("with-category", "category\\.with-category"))).count must_=== 1
+      }
     }
     "support multiple nestings" in new WithKamon {
       // Given a metrics singleton that has a category set multiple times.
@@ -337,7 +346,11 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       val context = Await.result(contextFut, defaultAwait)
 
       // Then the counters should have been created with the expected names.
-      takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("with-category", "category\\.uber-category\\.with-category"))).count must_=== 1
+      eventually(defaultRetries, defaultTimeout) {
+        val count = takeSnapshotFrom(Kamon.metrics.counter(nameGenerator.generateSuccessName("with-category", "category\\.uber-category\\.with-category"))).count
+        Logger.info(s"Count is [$count].")
+        count must_=== 1
+      }
     }
   }
 }
@@ -346,6 +359,7 @@ trait WithKamon extends BeforeAfter {
 
   override def before: Any = {
     Kamon.start()
+    Kamon.shutdown()
   }
 
   override def after: Any = {
