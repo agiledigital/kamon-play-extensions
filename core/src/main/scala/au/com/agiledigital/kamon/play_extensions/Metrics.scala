@@ -214,6 +214,7 @@ trait FutureNameGenerator {
  * Default implementation.
  */
 class DefaultFutureNameGenerator extends FutureNameGenerator {
+
   override def generateSuccessName(traceName: String, fullTraceName: String): String = fullTraceName + "\\.success"
 
   override def generateFailureName(traceName: String, fullTraceName: String): String = fullTraceName + "\\.failure"

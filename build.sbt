@@ -52,7 +52,9 @@ lazy val commonSettings = Seq(
         Wart.AsInstanceOf,
         Wart.ExplicitImplicitTypes,
         Wart.MutableDataStructures,
-        Wart.Return)
+        Wart.Return,
+        Wart.AsInstanceOf,
+        Wart.IsInstanceOf)
 )
 
 lazy val root = (project in file(".")).
@@ -64,7 +66,8 @@ lazy val root = (project in file(".")).
   ).
   aggregate(
     core,
-    testkit
+    testkit,
+    coreTests
   )
 
 lazy val core = (project in file("core")).
@@ -100,4 +103,5 @@ lazy val testkit = (project in file("testkit")).
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2-mock" % Specs2Version % Test
     )
-  )
+  ).
+  dependsOn(core)
