@@ -4,6 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import kamon.Kamon
 import kamon.trace.{TraceContext, Tracer}
+import play.api.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -161,10 +162,11 @@ class MetricsSingleton(category: Option[String], futureNameGenerator: FutureName
 
   override def withNewAsyncContext[T](traceName: String, autoFinish: Boolean, count: Boolean)(code: ⇒ Future[T])(implicit executionContext: ExecutionContext): Future[T] = {
     Tracer.withContext(Kamon.tracer.newContext(fullName(traceName))) {
+      val context = currentContext
       val codeResult = code
       if (autoFinish) {
         codeResult onComplete { _ =>
-          currentContext.finish()
+          context.finish()
         }
       }
 
@@ -173,7 +175,7 @@ class MetricsSingleton(category: Option[String], futureNameGenerator: FutureName
           case _ => Kamon.metrics.counter(futureNameGenerator.generateFailureName(traceName, fullName(traceName))).increment()
         }
 
-        codeResult onComplete {
+        codeResult onSuccess {
           case _ => Kamon.metrics.counter(futureNameGenerator.generateSuccessName(traceName, fullName(traceName))).increment()
         }
       }

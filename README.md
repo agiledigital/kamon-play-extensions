@@ -54,7 +54,7 @@ class Service @Inject()(metrics: Metrics) {
 ```
 
 ## Categorising Metrics
-By default Kamon records all trace metrics under `statsd.timer.$Application.Host.trace`. The extensions support writing those metrics to nested categories.
+By default Kamon records all trace metrics under `statsd.timer.$Application.$Host.trace`. The extensions support writing those metrics to nested categories.
 
 To use, set the statsd metric namer in `kamon.conf`:
 
@@ -84,7 +84,7 @@ class Service @Inject()(metrics: Metrics) {
 }
 ```
 
-This will cause metrics for those traces to be written to `statsd.timer.$Application.Host.trace.service`
+This will cause metrics for those traces to be written to `statsd.timer.$Application.$Host.trace.service`
 
 
 ## Testing

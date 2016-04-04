@@ -83,10 +83,12 @@ lazy val coreTests = (project in file("core-tests")).
     version := (version in LocalProject("root")).value,
     name := "play-kamon-extensions-tests",
     libraryDependencies ++= Seq(
+      "io.kamon" %% "kamon-testkit" % KamonVersion,
       "org.specs2" %% "specs2-core" % Specs2Version % Test,
       "org.specs2" %% "specs2-junit" % Specs2Version % Test,
       "org.specs2" %% "specs2-matcher-extra" % Specs2Version % Test,
-      "org.specs2" %% "specs2-mock" % Specs2Version % Test
+      "org.specs2" %% "specs2-mock" % Specs2Version % Test,
+      "com.typesafe.play" %% "play-specs2" % PlayVersion % Test
     ),
     parallelExecution in Test := false,
     publish := {},

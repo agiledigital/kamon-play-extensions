@@ -14,6 +14,7 @@ class EscapingMetricKeyGenerator @Inject()(config: Config) extends SimpleMetricK
     (s: String) => s.replace(": ", "-").
       replace(" ", "_").
       replace("/", "_").
+      replaceAll("""^\.""", "_").
       replaceAll("""([^\\])\.""", "$1_").
       replace("""\.""", ".")
   }
