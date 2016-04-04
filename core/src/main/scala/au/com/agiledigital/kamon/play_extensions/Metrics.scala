@@ -108,7 +108,9 @@ trait Metrics {
    * @tparam T the type produced by the Future.
    * @return the Future produced by the code.
    */
-  def withNewAsyncContext[T](traceName: String, autoFinish: Boolean, count: Boolean)(code: ⇒ Future[T])(implicit executionContext: ExecutionContext): Future[T]
+  def withNewAsyncContext[T](traceName: String, autoFinish: Boolean, count: Boolean)
+                            (code: ⇒ Future[T])
+                            (implicit executionContext: ExecutionContext): Future[T]
 
   /**
    * Creates a new context wrapping the specified Future producing code named using the implicitly passed name.
