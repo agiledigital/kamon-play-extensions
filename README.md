@@ -1,4 +1,4 @@
-# kamon-play-extensions [![Build Status](https://travis-ci.org/agiledigital/kamon-play-extensions.svg?branch=master)](https://travis-ci.org/agiledigital/kamon-play-extensions)
+# kamon-play-extensions [![Build Status](https://travis-ci.org/agiledigital/kamon-play-extensions.svg?branch=master)](https://travis-ci.org/agiledigital/kamon-play-extensions)[![Coverage Status](https://coveralls.io/repos/github/agiledigital/kamon-play-extensions/badge.svg?branch=master)](https://coveralls.io/github/agiledigital/kamon-play-extensions?branch=master)
 
 Provides a set of Play2 injectable extentsions for [Kamon](http://kamon.io/).
 
