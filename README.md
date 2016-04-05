@@ -95,4 +95,4 @@ To aid testing code that depends upon the `Metrics` extension, depend upon the t
 "au.com.agiledigital" %% "play-kamon-extensions-testkit" % "0.5"
 ```
 
-Use the do-nothing `Metrics implementation from `au.com.agiledigital.kamon.play_extensions.test#metrics`
+Use the do-nothing `Metrics` implementation from `au.com.agiledigital.kamon.play_extensions.test#metrics`
