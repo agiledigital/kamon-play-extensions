@@ -23,7 +23,7 @@ class FutureNameGeneratorProvider @Inject()(configuration: Configuration) extend
 
   override def get(): FutureNameGenerator = {
 
-    configuration.getString(configurationKey) flatMap { fcqn =>
+    configuration.getOptional[String](configurationKey).flatMap { fcqn =>
       dynamics.createInstanceFor[FutureNameGenerator](fcqn, Nil) match {
         case Success(generator) => Some(generator)
         case Failure(error) =>
