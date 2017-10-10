@@ -53,7 +53,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
         // With a default token.
         metrics.currentContext.token must not beEmpty
 
-        metrics.currentContext.isOpen must beTrue
+        metrics.currentContext.isClosed must beFalse
 
         10
       }
@@ -62,7 +62,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       result must_=== 10
 
       // And it should be replaced after is has executed.
-      metrics.currentContext.isOpen must_!= "no_token"
+      metrics.currentContext.token must_!== "no_token"
     }
     "record the token" in new WithKamon {
       // Given a metrics singleton
@@ -76,7 +76,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
         // With a default token.
         metrics.currentContext.token must_=== "token"
 
-        metrics.currentContext.isOpen must beTrue
+        metrics.currentContext.isClosed must beFalse
 
         false
       }
@@ -85,7 +85,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       result must beFalse
 
       // And it should be replaced after is has executed.
-      metrics.currentContext.isOpen must_!= "with_token"
+      metrics.currentContext.token must_!== "with_token"
     }
     "auto-close" in new WithKamon {
       // Given a metrics singleton
@@ -96,7 +96,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       val context = metrics.withNewContext("with_token", autoFinish = true) {
         // Then the current context should be set.
         metrics.currentContext.name must_=== "with_token"
-        metrics.currentContext.isOpen must beTrue
+        metrics.currentContext.isClosed must beFalse
         metrics.currentContext
       }
 
@@ -209,7 +209,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
           // Must move the context through the future manually as we can not rely on the weaving to do it when
           // running tests.
           context.name must_=== "success"
-          context.isOpen must beTrue
+          context.isClosed must beFalse
           context
         }
       }
@@ -219,7 +219,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
       val context = Await.result(contextFut, defaultAwait)
       eventually(defaultRetries, defaultTimeout) {
         context.name must_=== "success"
-        context.isOpen must beFalse
+        context.isClosed must beTrue
       }
 
       // And the counters should not have been incremented.
@@ -245,7 +245,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
           // Must move the context through the future manually as we can not rely on the weaving to do it when
           // running tests.
           context.name must_== "count-success"
-          context.isOpen must beTrue
+          context.isClosed must beFalse
           context
         }
       }
@@ -281,7 +281,7 @@ class MetricsSingletonSpec(implicit ev: ExecutionEnv) extends BaseSpec {
           // Must move the context through the future manually as we can not rely on the weaving to do it when
           // running tests.
           context.name must_== "count-failures"
-          context.isOpen must beTrue
+          context.isClosed must beFalse
           context
         }
       }
