@@ -7,7 +7,7 @@ Provides a set of Play2 injectable extentsions for [Kamon](http://kamon.io/).
 Add library as a dependency:
 
 ```scala
-"au.com.agiledigital" %% "play-kamon-extensions" % "0.5"
+"au.com.agiledigital" %% "play-kamon-extensions" % "0.6"
 ```
 
 Enable the Play2 module in `application.conf`
@@ -56,17 +56,7 @@ class Service @Inject()(metrics: Metrics) {
 ## Categorising Metrics
 By default Kamon records all trace metrics under `statsd.timer.$Application.$Host.trace`. The extensions support writing those metrics to nested categories.
 
-To use, set the statsd metric namer in `kamon.conf`:
-
-```scala
-kamon {
-  statsd {
-    metric-key-generator = "au.com.agiledigital.kamon.play_extensions.EscapingMetricKeyGenerator"
-  }
-}
-```
-
-Then to create nested trace categories, use `withCategory`
+To create nested trace categories, use `withCategory`
 
 ```scala
 import javax.inject.Inject
